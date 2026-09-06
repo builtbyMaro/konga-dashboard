@@ -1,9 +1,11 @@
 "use client";
+import { Data, Transaction } from "@/types/transaction";
 import { useState, useEffect } from "react";
 import LoadingScreen from "@/components/loadingDashboard";
 import WelcomeCard from "@/components/welcomeCard";
 import ErrorPage from "@/components/error";
-import { Data } from "@/types/transaction";
+import SummaryCard from "@/components/summaryCard";
+import Chart from "@/components/chart";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -54,11 +56,39 @@ const Home = () => {
     return <ErrorPage error={error} retry={retryFetch} />;
   }
 
+  let totalExpenses = 0;
+  let totalIncome = 0;
+  let numOfTransactions = 0;
+
+  if (data) {
+    totalIncome = data.transactions
+      .filter((transaction) => transaction.type === "income")
+      .reduce((total, transaction) => total + transaction.amount, 0);
+
+    totalExpenses = data.transactions
+      .filter((transaction) => transaction.type === "expense")
+      .reduce((total, transaction) => total + transaction.amount, 0);
+
+    numOfTransactions = data.transactions.length;
+  }
+
+  ("#ed017f");
+  ("#4285f5");
+  ("#ff0000");
+
   return (
     <main>
-      <WelcomeCard balance={data?.accountBalance} />
-      <h2>Summary Cards</h2>
-      <h2>Chart</h2>
+      <section>
+        <WelcomeCard balance={data?.accountBalance} />
+        <SummaryCard value={totalIncome} text="Total Income" symbol={true} />
+        <SummaryCard
+          value={totalExpenses}
+          text="Total Expenses"
+          symbol={true}
+        />
+        <SummaryCard value={numOfTransactions} text="No. of Transactions" />
+      </section>
+      <Chart income={totalIncome} expense={totalExpenses} />
       <h2>Recent Transactions</h2>
     </main>
   );
