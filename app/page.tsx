@@ -41,6 +41,7 @@ const Home = () => {
   };
 
   const retryFetch = () => {
+    setLoading(true);
     setError("");
     fetchData();
   };
@@ -92,7 +93,7 @@ const Home = () => {
         <SummaryCard value={numOfTransactions} text="No. of Transactions" />
       </section>
       <section className="p-4">
-        <RecentTransactions transactions={data!.transactions.slice(0, 10)} />
+        <RecentTransactions transactions={data?.transactions.slice(0, 10)} />
       </section>
       <section>
         <Chart income={totalIncome} expense={totalExpenses} />

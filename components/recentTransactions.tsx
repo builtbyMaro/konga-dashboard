@@ -4,7 +4,7 @@ import TransactionRow from "./transactionRow";
 const RecentTransactions = ({
   transactions,
 }: {
-  transactions: Transaction[];
+  transactions: Transaction[] | undefined;
 }) => {
   return (
     <div>
@@ -15,7 +15,7 @@ const RecentTransactions = ({
         </a>
       </div>
       <div className="flex flex-col gap-1 p-1 border-[1.5px] border-[#ed017f] rounded bg-white">
-        {transactions.map((transaction) => (
+        {transactions?.map((transaction) => (
           <TransactionRow transaction={transaction} key={transaction.id} />
         ))}
       </div>

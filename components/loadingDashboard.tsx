@@ -1,17 +1,8 @@
 const LoadingScreen = () => {
   return (
     <main className="">
-      <section>
-        <div>Welcome message</div>
-        <div>Summary card</div>
-        <div>Summary card</div>
-        <div>Summary card</div>
-      </section>
-      <section>
-        <div>chart</div>
-      </section>
-      <section>
-        <div>Recent Transactions</div>
+      <section className="w-dvw h-dvh flex flex-col justify-center items-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#ed017f] border-t-transparent" />
       </section>
     </main>
   );
