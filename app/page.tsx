@@ -6,6 +6,7 @@ import WelcomeCard from "@/components/welcomeCard";
 import ErrorPage from "@/components/error";
 import SummaryCard from "@/components/summaryCard";
 import Chart from "@/components/chart";
+import RecentTransactions from "@/components/recentTransactions";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -61,13 +62,15 @@ const Home = () => {
   let numOfTransactions = 0;
 
   if (data) {
-    totalIncome = data.transactions
-      .filter((transaction) => transaction.type === "income")
-      .reduce((total, transaction) => total + transaction.amount, 0);
+    data.transactions.map((transaction) => {
+      if (transaction.type == "income") {
+        totalIncome += transaction.amount;
+      }
 
-    totalExpenses = data.transactions
-      .filter((transaction) => transaction.type === "expense")
-      .reduce((total, transaction) => total + transaction.amount, 0);
+      if (transaction.type == "expense") {
+        totalExpenses += transaction.amount;
+      }
+    });
 
     numOfTransactions = data.transactions.length;
   }
@@ -78,7 +81,7 @@ const Home = () => {
 
   return (
     <main>
-      <section>
+      <section className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 p-4 gap-4">
         <WelcomeCard balance={data?.accountBalance} />
         <SummaryCard value={totalIncome} text="Total Income" symbol={true} />
         <SummaryCard
@@ -88,8 +91,12 @@ const Home = () => {
         />
         <SummaryCard value={numOfTransactions} text="No. of Transactions" />
       </section>
-      <Chart income={totalIncome} expense={totalExpenses} />
-      <h2>Recent Transactions</h2>
+      <section className="p-4">
+        <RecentTransactions transactions={data!.transactions.slice(0, 10)} />
+      </section>
+      <section>
+        <Chart income={totalIncome} expense={totalExpenses} />
+      </section>
     </main>
   );
 };

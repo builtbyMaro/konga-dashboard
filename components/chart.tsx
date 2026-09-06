@@ -21,7 +21,7 @@ const Chart = ({ income, expense }: Props) => {
     {
       name: "Income",
       value: income,
-      fill: "#3b82f6",
+      fill: "#4285f5",
     },
     {
       name: "Expense",
