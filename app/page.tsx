@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import LoadingScreen from "@/components/loadingDashboard";
 import WelcomeCard from "@/components/welcomeCard";
+import ErrorPage from "@/components/error";
 import { Data } from "@/types/transaction";
 
 const Home = () => {
@@ -36,6 +37,11 @@ const Home = () => {
     }
   };
 
+  const retryFetch = () => {
+    setError("");
+    fetchData();
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -45,12 +51,7 @@ const Home = () => {
   }
 
   if (error) {
-    return (
-      <div>
-        <h1>{error}</h1>
-        <button>Retry</button>
-      </div>
-    );
+    return <ErrorPage error={error} retry={retryFetch} />;
   }
 
   return (
