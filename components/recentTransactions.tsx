@@ -10,7 +10,7 @@ const RecentTransactions = ({
     <div>
       <div className="flex justify-between">
         <h3>Recent Transactions</h3>
-        <a href="" className="text-[#ed017f]">
+        <a href="/transactions" className="text-[#ed017f]">
           View all
         </a>
       </div>

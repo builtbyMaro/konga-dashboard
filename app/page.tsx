@@ -1,6 +1,5 @@
 "use client";
-import { Data, Transaction } from "@/types/transaction";
-import { useState, useEffect } from "react";
+import useFetchData from "@/hooks/useFetchData";
 import LoadingScreen from "@/components/loadingDashboard";
 import WelcomeCard from "@/components/welcomeCard";
 import ErrorPage from "@/components/error";
@@ -9,46 +8,7 @@ import Chart from "@/components/chart";
 import RecentTransactions from "@/components/recentTransactions";
 
 const Home = () => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [data, setData] = useState<Data>();
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch("/api/transactions");
-
-      if (!response.ok) {
-        const error = new Error(`HTTP ${response.status}`) as any;
-        error.status = response.status;
-        throw error;
-      }
-
-      const data: Data = await response.json();
-
-      setData(data);
-    } catch (error: any) {
-      if (error.status) {
-        setError("Something went wrong");
-        console.error(error.status);
-      } else {
-        setError(
-          "Please check your connection and try again or Try refreshing your browser",
-        );
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const retryFetch = () => {
-    setLoading(true);
-    setError("");
-    fetchData();
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const { loading, error, retryFetch, data } = useFetchData();
 
   if (loading) {
     return <LoadingScreen />;
@@ -75,10 +35,6 @@ const Home = () => {
 
     numOfTransactions = data.transactions.length;
   }
-
-  ("#ed017f");
-  ("#4285f5");
-  ("#ff0000");
 
   return (
     <main>
