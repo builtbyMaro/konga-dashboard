@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, type ChangeEvent } from "react";
+import { useState } from "react";
 import useFetchData from "@/hooks/useFetchData";
 import Transactions from "@/components/transactions";
 import LoadingScreen from "@/components/loadingDashboard";
@@ -34,7 +34,7 @@ const TransactionsPage = () => {
           onChange={(e) =>
             setFilterMode(e.target.value as "all" | "income" | "expense")
           }
-          className="rounded border-[1.5px] border-[#ed017f] px-1 py-2 w-3xs"
+          className="rounded border-[1.5px] border-[#ed017f] px-1 py-2 w-3xs focus:border-[#ed017f]"
         >
           <option value="all">All</option>
           <option value="income">Income</option>
