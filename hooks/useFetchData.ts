@@ -1,53 +1,51 @@
+"use client";
 import { Data } from "@/types/transaction";
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchData = async (): Promise<Data> => {
+  const response = await fetch("/api/transactions");
+
+  if (!response.ok) {
+    const error = new Error(`HTTP ${response.status}`) as Error & {
+      status: number;
+    };
+
+    error.status = response.status;
+
+    throw error;
+  }
+
+  return response.json();
+};
 
 const useFetchData = () => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [data, setData] = useState<Data>();
+  const { data, isLoading, error, refetch } = useQuery<
+    Data,
+    Error & { status?: number }
+  >({
+    queryKey: ["transactions"],
+    queryFn: fetchData,
+    refetchInterval: 15 * 60 * 1000,
+  });
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch("/api/transactions");
+  let errorMessage = "";
 
-      if (!response.ok) {
-        const error = new Error(`HTTP ${response.status}`) as any;
-        error.status = response.status;
-        throw error;
-      }
-
-      const data: Data = await response.json();
-
-      setData(data);
-    } catch (error: any) {
-      if (error.status) {
-        setError("Something went wrong");
-        console.error(error.status);
-      } else {
-        setError(
-          "Please check your connection and try again or Try refreshing your browser",
-        );
-      }
-    } finally {
-      setLoading(false);
+  if (error) {
+    if (error.status) {
+      errorMessage = "Something went wrong";
+      console.error(error.status);
+    } else {
+      errorMessage =
+        "Please check your connection and try again or Try refreshing your browser";
     }
+  }
+
+  return {
+    loading: isLoading,
+    error: errorMessage,
+    retryFetch: refetch,
+    data,
   };
-
-  const retryFetch = () => {
-    setLoading(true);
-    setError("");
-    fetchData();
-  };
-
-  useEffect(() => {
-    fetchData();
-
-    const interval = setInterval(fetchData, 60 * 1000 * 15);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return { loading, error, retryFetch, data };
 };
 
 export default useFetchData;
