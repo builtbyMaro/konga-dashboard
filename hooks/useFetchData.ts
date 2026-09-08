@@ -41,6 +41,10 @@ const useFetchData = () => {
 
   useEffect(() => {
     fetchData();
+
+    const interval = setInterval(fetchData, 60 * 1000 * 15);
+
+    return () => clearInterval(interval);
   }, []);
 
   return { loading, error, retryFetch, data };
